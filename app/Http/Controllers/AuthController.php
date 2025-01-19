@@ -63,7 +63,7 @@ class AuthController extends Controller
             ]
         ]);
 
-        echo 'LOGIN SUCESSO';
+        return redirect('/');
 
     }
 
@@ -71,6 +71,6 @@ class AuthController extends Controller
         //logout
 
         session()->forget(('user'));
-        return redirect()->to('/login');
+        return redirect('/login');
     }
 }
