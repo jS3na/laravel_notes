@@ -6,14 +6,17 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(){
+    public function login()
+    {
         return view('login');
     }
 
-    public function loginSubmit(Request $request){
+    public function loginSubmit(Request $request)
+    {
         // form validation
         $request->validate(
             //rules
@@ -43,13 +46,13 @@ class AuthController extends Controller
             ->where('deleted_at', NULL)
             ->first();
 
-        if(!$user){
+        if (!$user) {
             return redirect()->back()->withInput()->with('login_error', 'Username ou password incorretos');
         }
 
         //check if password is correct
 
-        if(!password_verify($password, $user->password)){
+        if (!password_verify($password, $user->password)) {
             return redirect()->back()->withInput()->with('login_error', 'Username ou password incorretos');
         }
 
@@ -64,10 +67,45 @@ class AuthController extends Controller
         ]);
 
         return redirect('/');
-
     }
 
-    public function logout(){
+    public function register()
+    {
+        return view('register');
+    }
+
+    public function registerSubmit(Request $request)
+    {
+
+        $request->validate(
+            [
+                'text_username' => 'required|email',
+                'text_password' => 'required|min:6|max:16'
+            ],
+            //error messages
+            [
+                'text_username.required' => 'O username é obrigatório',
+                'text_username.email' => 'O username deve ser um email válido',
+
+                'text_password.required' => 'A senha é obrigatória',
+                'text_password.min' => 'A senha deve ter no mínimo :min caracteres',
+                'text_password.max' => 'A senha deve ter no máximo :max caracteres',
+            ]
+        );
+
+        $username = $request->input('text_username');
+        $password = Hash::make($request->input('text_password'));
+
+        $user = new User;
+        $user->username = $username;
+        $user->password = $password;
+        $user->save();
+
+        return redirect('/login');
+    }
+
+    public function logout()
+    {
         //logout
 
         session()->forget(('user'));

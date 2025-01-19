@@ -6,15 +6,14 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-sm-8">
             <div class="card p-5">
-
                 <div class="text-center p-3">
                     <img src="assets/images/logo.png" alt="Notes logo">
                 </div>
 
                 <div class="row justify-content-center">
                     <div class="col-md-10 col-12">
-                        <h1 class="text-center">LOGIN</h1>
-                        <form action="/loginSubmit" method="post" novalidate>
+                        <h1 class="text-center">REGISTER</h1>
+                        <form action="/registerSubmit" method="post" novalidate>
                             @csrf
                             <div class="mb-3">
                                 <label for="text_username" class="form-label">Username</label>
@@ -37,10 +36,10 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-secondary w-100">LOGIN</button>
+                                <button type="submit" class="btn btn-secondary w-100">REGISTER</button>
                             </div>
                             <div class="mb-3">
-                                <a href="/register" class="btn btn-secondary w-100">REGISTER</a>
+                                <a href="/login" class="btn btn-secondary w-100">LOGIN</a>
                             </div>
                         </form>
 
