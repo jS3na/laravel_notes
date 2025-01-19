@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Facade;
@@ -36,19 +37,40 @@ class AuthController extends Controller
         $username = $request->input('text_username');
         $password = $request->input('text_password');
 
-        try {
-            DB::connection()->getPdo();
+        //check if users exists
 
-            echo 'Connection is OK!';
-        } catch (\PDOException $e) {
-            echo 'Connection failed: ' . $e->getMessage();
+        $user = User::where('username', $username)
+            ->where('deleted_at', NULL)
+            ->first();
+
+        if(!$user){
+            return redirect()->back()->withInput()->with('login_error', 'Username ou password incorretos');
         }
 
-        echo 'FIM!';
+        //check if password is correct
+
+        if(!password_verify($password, $user->password)){
+            return redirect()->back()->withInput()->with('login_error', 'Username ou password incorretos');
+        }
+
+        $user->last_login = date('Y-m-d H:i:s');
+        $user->save();
+
+        session([
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username
+            ]
+        ]);
+
+        echo 'LOGIN SUCESSO';
 
     }
 
     public function logout(){
-        echo 'Logout';
+        //logout
+
+        session()->forget(('user'));
+        return redirect()->to('/login');
     }
 }
