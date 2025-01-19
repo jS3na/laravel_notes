@@ -32,7 +32,7 @@
                                 {{-- show error --}}
 
                                 @error('text_password')
-                                    <div class="text-danger">{{ $message }}</div>
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3">
@@ -41,9 +41,9 @@
                         </form>
 
                         @if(session('login_error'))
-                            <div class="alert alert-danger text-center">
-                                {{ session('login_error') }}
-                            </div>
+                        <div class="alert alert-danger text-center">
+                            {{ session('login_error') }}
+                        </div>
                         @endif
                     </div>
                 </div>
